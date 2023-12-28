@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import com.example.authviacode.databinding.FragmentAuthBinding
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 
@@ -22,6 +23,18 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupPhoneSample()
+        changeBtnColors(enabled = false)
+    }
+
+    private fun changeBtnColors(enabled: Boolean){
+        val btn = binding.btnContinue
+        if(!enabled){
+            btn.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.btnDisBack, null))
+            btn.setTextColor(ResourcesCompat.getColor(resources, R.color.btnDisText, null))
+        } else {
+            btn.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.mainBlack, null))
+            btn.setTextColor(ResourcesCompat.getColor(resources, R.color.white, null))
+        }
     }
 
     private fun setupPhoneSample() {
@@ -35,7 +48,7 @@ class AuthFragment : Fragment() {
                     formattedValue: String,
                     tailPlaceholder: String
                 ) {
-
+                    changeBtnColors(maskFilled)
                 }
             }
         )
