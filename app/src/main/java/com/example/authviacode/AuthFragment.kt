@@ -12,9 +12,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.authviacode.data.remote.AuthApi
+import com.example.authviacode.data.remote.User
 import com.example.authviacode.data.remote.responses.Code
+import com.example.authviacode.data.remote.responses.Token
 import com.example.authviacode.databinding.FragmentAuthBinding
 import com.example.authviacode.util.Constants.BASE_URL
+import com.google.gson.GsonBuilder
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +27,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+
 
 class AuthFragment : Fragment() {
     private lateinit var binding: FragmentAuthBinding
@@ -50,6 +55,23 @@ class AuthFragment : Fragment() {
 
         btnAuthEnabling()
         btnAuthOnClick()
+    }
+
+    private fun tokenRequest(){
+        val retrofit = Retrofit.Builder()
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .build()
+            .create(AuthApi::class.java)
+        CoroutineScope(Dispatchers.Default).launch {
+            val request = retrofit.getToken(
+                phoneNumber,
+                model.liveDataUser.value?.code
+                )
+            requireActivity().runOnUiThread {
+                model.liveDataToken.value = Token(request)
+            }
+        }
     }
 
     private fun btnAuthOnClick() {
@@ -85,9 +107,11 @@ class AuthFragment : Fragment() {
 
     private fun changeBtnAuthColors(enabled: Boolean){
         if(enabled){
+            binding.btnAuth.isEnabled = true
             binding.btnAuth.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.mainBlack, null))
             binding.btnAuth.setTextColor(ResourcesCompat.getColor(resources, R.color.white, null))
         } else {
+            binding.btnAuth.isEnabled = false
             binding.btnAuth.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.btnDisBack, null))
             binding.btnAuth.setTextColor(ResourcesCompat.getColor(resources, R.color.btnDisText, null))
         }
@@ -149,6 +173,7 @@ class AuthFragment : Fragment() {
                 phone = phoneNumber,
                 code = code?.code
             )
+            tokenRequest()
             btnCodeRequestOnClick()
         }
     }
@@ -163,9 +188,11 @@ class AuthFragment : Fragment() {
     private fun changeBtnColors(enabled: Boolean) {
         val btn = binding.btnContinue
         if (!enabled) {
+            btn.isEnabled = false
             btn.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.btnDisBack, null))
             btn.setTextColor(ResourcesCompat.getColor(resources, R.color.btnDisText, null))
         } else {
+            btn.isEnabled = true
             btn.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.mainBlack, null))
             btn.setTextColor(ResourcesCompat.getColor(resources, R.color.white, null))
         }

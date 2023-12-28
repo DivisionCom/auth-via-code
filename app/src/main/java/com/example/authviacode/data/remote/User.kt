@@ -1,4 +1,4 @@
-package com.example.authviacode
+package com.example.authviacode.data.remote
 
 data class User(
     val phone: String,
