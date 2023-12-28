@@ -18,6 +18,10 @@ class AuthFragment : Fragment() {
         return binding.root
     }
 
+    private fun setupPhoneSample() {
+
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() = AuthFragment()
