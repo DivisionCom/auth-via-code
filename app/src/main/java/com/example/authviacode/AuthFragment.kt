@@ -47,7 +47,7 @@ class AuthFragment : Fragment() {
         getCodeElements()
     }
 
-    private fun initRetrofit(){
+    private fun initRetrofit() {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -63,12 +63,12 @@ class AuthFragment : Fragment() {
         authApi = retrofit.create(AuthApi::class.java)
     }
 
-    private fun codeElementsVisibility(visibility: Int){
+    private fun codeElementsVisibility(visibility: Int) {
         binding.tvLabelCode.visibility = visibility
         binding.layoutCode.visibility = visibility
     }
 
-    private fun getCodeElements(){
+    private fun getCodeElements() {
         codeElementsVisibility(View.INVISIBLE)
         binding.btnContinue.setOnClickListener {
             codeElementsVisibility(View.VISIBLE)
@@ -80,40 +80,40 @@ class AuthFragment : Fragment() {
         }
     }
 
-    private fun codeRequest(){
+    private fun codeRequest() {
         CoroutineScope(Dispatchers.Default).launch {
             val response = authApi.getAuthCode(phoneNumber)
             gettingCode(response)
         }
     }
 
-    private fun gettingCode(response: Response<Code>){
+    private fun gettingCode(response: Response<Code>) {
         val code = response.body()
 
         requireActivity().runOnUiThread {
             if (code?.status == "new" || requesting > 0) {
                 Toast.makeText(context, "Ваш код: ${code?.code}", Toast.LENGTH_LONG).show()
-            } else if (code?.status == "old"){
+            } else if (code?.status == "old") {
                 Toast.makeText(
                     context,
                     "Если забыли код, нажмите \"Запросить код\"",
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
                 ).show()
             }
             btnCodeRequestOnClick()
         }
     }
 
-    private fun btnCodeRequestOnClick(){
+    private fun btnCodeRequestOnClick() {
         binding.btnCodeRequest.setOnClickListener {
             requesting++
             codeRequest()
         }
     }
 
-    private fun changeBtnColors(enabled: Boolean){
+    private fun changeBtnColors(enabled: Boolean) {
         val btn = binding.btnContinue
-        if(!enabled){
+        if (!enabled) {
             btn.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.btnDisBack, null))
             btn.setTextColor(ResourcesCompat.getColor(resources, R.color.btnDisText, null))
         } else {
@@ -126,7 +126,7 @@ class AuthFragment : Fragment() {
         val listener: MaskedTextChangedListener = MaskedTextChangedListener.installOn(
             binding.etPhone,
             "+7 ([000]) [000]-[00]-[00]",
-            object: MaskedTextChangedListener.ValueListener {
+            object : MaskedTextChangedListener.ValueListener {
                 override fun onTextChanged(
                     maskFilled: Boolean,
                     extractedValue: String,
@@ -134,7 +134,7 @@ class AuthFragment : Fragment() {
                     tailPlaceholder: String
                 ) {
                     changeBtnColors(maskFilled)
-                    if(maskFilled){
+                    if (maskFilled) {
                         phoneNumber = "7$extractedValue"
                     }
                 }
