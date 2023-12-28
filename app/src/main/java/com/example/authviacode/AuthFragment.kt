@@ -49,11 +49,20 @@ class AuthFragment : Fragment() {
         getCodeElements()
 
         btnAuthEnabling()
+        btnAuthOnClick()
     }
 
     private fun btnAuthOnClick() {
         binding.btnAuth.setOnClickListener {
-
+            if(binding.etCode.text.toString() == model.liveDataUser.value?.code){
+                fragmentManager
+                    ?.beginTransaction()
+                    ?.replace(R.id.placeHolder, TokenFragment.newInstance())
+                    ?.commit()
+            } else {
+                Toast.makeText(context, "Неверный код", Toast.LENGTH_SHORT).show()
+                binding.btnCodeRequest.text = "Запросить новый код"
+            }
         }
     }
 
