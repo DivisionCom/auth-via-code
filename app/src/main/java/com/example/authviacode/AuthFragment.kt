@@ -28,6 +28,7 @@ class AuthFragment : Fragment() {
     private lateinit var binding: FragmentAuthBinding
     private lateinit var authApi: AuthApi
     private lateinit var phoneNumber: String
+    private var requesting: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,9 +42,9 @@ class AuthFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupPhoneSample()
         changeBtnColors(enabled = false)
-        getCodeElements()
 
         initRetrofit()
+        getCodeElements()
     }
 
     private fun initRetrofit(){
@@ -73,6 +74,7 @@ class AuthFragment : Fragment() {
             codeElementsVisibility(View.VISIBLE)
             binding.btnContinue.visibility = View.GONE
             binding.btnAuth.visibility = View.VISIBLE
+            binding.btnCodeRequest.visibility = View.VISIBLE
             binding.layoutPhone.isEnabled = false
             codeRequest()
         }
@@ -80,7 +82,6 @@ class AuthFragment : Fragment() {
 
     private fun codeRequest(){
         CoroutineScope(Dispatchers.Default).launch {
-            authApi.getAuthCode(phoneNumber)
             val response = authApi.getAuthCode(phoneNumber)
             gettingCode(response)
         }
@@ -88,8 +89,25 @@ class AuthFragment : Fragment() {
 
     private fun gettingCode(response: Response<Code>){
         val code = response.body()
-        requireActivity().runOnUiThread{
-            Toast.makeText(context, "Ваш код: ${code?.code}", Toast.LENGTH_LONG).show()
+
+        requireActivity().runOnUiThread {
+            if (code?.status == "new" || requesting > 0) {
+                Toast.makeText(context, "Ваш код: ${code?.code}", Toast.LENGTH_LONG).show()
+            } else if (code?.status == "old"){
+                Toast.makeText(
+                    context,
+                    "Если забыли код, нажмите \"Запросить код\"",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            btnCodeRequestOnClick()
+        }
+    }
+
+    private fun btnCodeRequestOnClick(){
+        binding.btnCodeRequest.setOnClickListener {
+            requesting++
+            codeRequest()
         }
     }
 

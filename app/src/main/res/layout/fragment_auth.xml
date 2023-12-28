@@ -126,4 +126,16 @@
         app:layout_constraintStart_toStartOf="@+id/layoutPhone"
         app:layout_constraintTop_toBottomOf="@+id/layoutCode" />
 
+    <Button
+        android:id="@+id/btnCodeRequest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/mainBlack"
+        android:visibility="gone"
+        android:text="Запросить код"
+        app:layout_constraintEnd_toEndOf="@+id/btnAuth"
+        app:layout_constraintStart_toStartOf="@+id/btnAuth"
+        app:layout_constraintTop_toBottomOf="@+id/btnAuth" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
