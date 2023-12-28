@@ -24,6 +24,21 @@ class AuthFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupPhoneSample()
         changeBtnColors(enabled = false)
+        getCodeElements()
+    }
+
+    private fun codeElementsVisibility(visibility: Int){
+        binding.tvLabelCode.visibility = visibility
+        binding.layoutCode.visibility = visibility
+    }
+
+    private fun getCodeElements(){
+        codeElementsVisibility(View.INVISIBLE)
+        binding.btnContinue.setOnClickListener {
+            codeElementsVisibility(View.VISIBLE)
+            binding.btnContinue.visibility = View.GONE
+            binding.btnAuth.visibility = View.VISIBLE
+        }
     }
 
     private fun changeBtnColors(enabled: Boolean){

@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvLabel"
+        android:id="@+id/tvLabelPhone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -45,10 +45,10 @@
         app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color"
         app:boxStrokeWidth="3dp"
         app:boxStrokeWidthFocused="3dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvLabel"
+        app:layout_constraintEnd_toEndOf="@+id/tvLabelPhone"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/tvLabel"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabel">
+        app:layout_constraintStart_toStartOf="@+id/tvLabelPhone"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelPhone">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPhone"
@@ -61,16 +61,69 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tvLabelCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Введите код"
+        android:textColor="@color/mainBlack"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/layoutPhone"
+        app:layout_constraintStart_toStartOf="@+id/layoutPhone"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPhone" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusTopStart="30dp"
+        app:boxStrokeColor="@color/mtrl_textinput_default_box_stroke_color"
+        app:boxStrokeWidth="3dp"
+        app:boxStrokeWidthFocused="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelCode">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:maxLength="6"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/btnContinue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="163dp"
-        android:text="Продолжить"
         android:backgroundTint="@color/mainBlack"
+        android:text="Продолжить"
         app:layout_constraintEnd_toEndOf="@+id/layoutPhone"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/layoutPhone"
-        app:layout_constraintTop_toBottomOf="@+id/layoutPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutCode" />
+
+    <Button
+        android:id="@+id/btnAuth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="163dp"
+        android:backgroundTint="@color/mainBlack"
+        android:visibility="gone"
+        android:text="Авторизоваться"
+        app:layout_constraintEnd_toEndOf="@+id/layoutPhone"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/layoutPhone"
+        app:layout_constraintTop_toBottomOf="@+id/layoutCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
