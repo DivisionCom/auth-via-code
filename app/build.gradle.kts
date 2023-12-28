@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    implementation("com.redmadrobot:input-mask-android:7.2.4")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
