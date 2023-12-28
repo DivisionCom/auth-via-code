@@ -45,6 +45,8 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+
     implementation("com.redmadrobot:input-mask-android:7.2.4")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
 

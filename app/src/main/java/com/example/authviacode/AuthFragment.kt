@@ -1,13 +1,16 @@
 package com.example.authviacode
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.authviacode.data.remote.AuthApi
 import com.example.authviacode.data.remote.responses.Code
 import com.example.authviacode.databinding.FragmentAuthBinding
@@ -15,9 +18,7 @@ import com.example.authviacode.util.Constants.BASE_URL
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -29,6 +30,7 @@ class AuthFragment : Fragment() {
     private lateinit var authApi: AuthApi
     private lateinit var phoneNumber: String
     private var requesting: Int = 0
+    private val model: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +47,41 @@ class AuthFragment : Fragment() {
 
         initRetrofit()
         getCodeElements()
+
+        btnAuthEnabling()
+    }
+
+    private fun btnAuthOnClick() {
+        binding.btnAuth.setOnClickListener {
+
+        }
+    }
+
+    private fun btnAuthEnabling() {
+        changeBtnAuthColors(!binding.btnAuth.isEnabled)
+        binding.etCode.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.btnAuth.isEnabled = binding.etCode.text?.length == 6
+                changeBtnAuthColors(binding.btnAuth.isEnabled)
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+    }
+
+    private fun changeBtnAuthColors(enabled: Boolean){
+        if(enabled){
+            binding.btnAuth.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.mainBlack, null))
+            binding.btnAuth.setTextColor(ResourcesCompat.getColor(resources, R.color.white, null))
+        } else {
+            binding.btnAuth.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.btnDisBack, null))
+            binding.btnAuth.setTextColor(ResourcesCompat.getColor(resources, R.color.btnDisText, null))
+        }
     }
 
     private fun initRetrofit() {
@@ -89,7 +126,6 @@ class AuthFragment : Fragment() {
 
     private fun gettingCode(response: Response<Code>) {
         val code = response.body()
-
         requireActivity().runOnUiThread {
             if (code?.status == "new" || requesting > 0) {
                 Toast.makeText(context, "Ваш код: ${code?.code}", Toast.LENGTH_LONG).show()
@@ -100,6 +136,10 @@ class AuthFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            model.liveDataUser.value = User(
+                phone = phoneNumber,
+                code = code?.code
+            )
             btnCodeRequestOnClick()
         }
     }
