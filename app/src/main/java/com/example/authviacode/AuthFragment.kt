@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.authviacode.databinding.FragmentAuthBinding
+import com.redmadrobot.inputmask.MaskedTextChangedListener
 
 class AuthFragment : Fragment() {
     private lateinit var binding: FragmentAuthBinding
@@ -18,8 +19,27 @@ class AuthFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupPhoneSample() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupPhoneSample()
+    }
 
+    private fun setupPhoneSample() {
+        val listener: MaskedTextChangedListener = MaskedTextChangedListener.installOn(
+            binding.etPhone,
+            "+7 ([000]) [000]-[00]-[00]",
+            object: MaskedTextChangedListener.ValueListener {
+                override fun onTextChanged(
+                    maskFilled: Boolean,
+                    extractedValue: String,
+                    formattedValue: String,
+                    tailPlaceholder: String
+                ) {
+
+                }
+            }
+        )
+        binding.etPhone.hint = listener.placeholder()
     }
 
     companion object {
